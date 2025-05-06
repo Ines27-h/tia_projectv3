@@ -5,3 +5,6 @@ pandas==2.2.3
 torch==2.2.1
 transformers==4.51.3
 scikit-learn==1.6.1
+transformers
+torch
+huggingface_hub
