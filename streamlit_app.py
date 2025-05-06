@@ -72,9 +72,27 @@ def create_input_vector(user_inputs, anamnese_embedding):
     return input_vector
 
 # --- Streamlit UI ---
-st.set_page_config(page_title="TIA Voorspelling", page_icon="🚑", layout="centered")
-st.title("🚑 TIA Voorspellingstool voor Huisartsen")
+st.set_page_config(page_title="TIA Voorspelling", page_icon="🧠", layout="centered")
+st.title("🧠 TIA Voorspellingstool voor Huisartsen")
 st.markdown("Voer de klinische gegevens van de patiënt in om een voorspelling te maken.")
+
+# --- Disclaimer ---
+with st.expander("⚠️ Belangrijke Disclaimer – klik om te lezen"):
+    st.markdown("""
+    Deze tool is ontwikkeld ter **ondersteuning van huisartsen** bij het herkennen van mogelijke TIA’s (Transiënte Ischemische Aanvallen). De voorspellingen van het model zijn **niet bedoeld als vervanging van klinisch oordeel** of medisch beleid.  
+
+    - Gebruik dit model **uitsluitend als hulpmiddel**, en laat het **niet leidend** zijn in besluitvorming.  
+    - Het model **voorspelt alleen mogelijke TIA's** en **herkent geen andere neurologische aandoeningen** zoals hersenbloedingen of infarcten.  
+    - Een positieve voorspelling kan betrekking hebben op **verschillende presentaties van een TIA**. Verwijzing en verdere diagnostiek blijven noodzakelijk.
+
+    Raadpleeg bij twijfel altijd een specialist.
+    """)
+
+akkoord = st.checkbox("Ik begrijp en accepteer deze voorwaarden.")
+
+if not akkoord:
+    st.warning("Om de tool te gebruiken, moet je eerst de disclaimer accepteren.")
+    st.stop()
 
 # Inputvelden
 anamnese_input = st.text_area("Anamnese tekst", placeholder="Bijv. Patiënt had plots spraakproblemen en krachtverlies...")
@@ -164,9 +182,9 @@ if st.button("Voorspel TIA"):
 
         st.subheader("Resultaat:")
         if prediction == 1:
-            st.success(f"💥 Mogelijke TIA! (Voorspelkans: {probability:.2f})")
+            st.error(f"Mogelijke TIA! (Voorspelkans: {probability:.2f})")
         else:
-            st.info(f"✅ Geen TIA voorspeld. (Voorspelkans: {probability:.2f})")
+            st.info(f"Geen TIA voorspeld. (Voorspelkans: {probability:.2f})")
 
         st.markdown("---")
         st.caption("Model: Logistic Regression + SelectKBest + MedRoBERTa.nl embedding")
