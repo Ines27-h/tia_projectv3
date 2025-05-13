@@ -95,7 +95,7 @@ if not akkoord:
     st.stop()
 
 # Inputvelden
-anamnese_input = st.text_area("Anamnese tekst", placeholder="Bijv. Patiënt had plots spraakproblemen en krachtverlies...")
+anamnese_input = st.text_area("Anamnese tekst", placeholder="Bijv. Patiënt had plots spraakproblemen en krachtverlies...", help="Plaats hier de volledige anamnese zoals genoteerd in het EPD, inclusief klachten, verloop en context.")
 age = st.number_input("Leeftijd (in jaren)", min_value=0, max_value=120, value=65)
 seks = st.selectbox("Geslacht", ["Man", "Vrouw"])
 
@@ -181,10 +181,8 @@ if st.button("Voorspel TIA"):
         prediction = model.predict(input_vector)[0]
 
         st.subheader("Resultaat:")
-        if prediction == 1:
-            st.error(f"Mogelijke TIA! (Voorspelkans: {probability:.2f})")
-        else:
-            st.info(f"Geen TIA voorspeld. (Voorspelkans: {probability:.2f})")
+        probability = model.predict_proba(input_vector)[0, 1]
+        st.info(f"De kans op een TIA is: {probability * 100:.0f}%")
 
         st.markdown("---")
         st.caption("Model: Logistic Regression + SelectKBest + MedRoBERTa.nl embedding")
